@@ -4,6 +4,8 @@ declare const XRExtras: any
 declare const XR8: any
 
 interface AFrameElement extends HTMLElement {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   object3D: THREE.Object3D
 }
 
