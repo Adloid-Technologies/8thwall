@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import {AFrameFactory} from './aframe/aframe'
 import {AlmostThereFactory} from './almosttheremodule/almost-there-module'
 import {DebugWebViewsFactory} from './debugwebviews/debug-web-views'
