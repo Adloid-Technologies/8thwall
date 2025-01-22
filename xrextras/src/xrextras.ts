@@ -37,7 +37,7 @@ const XRExtras = {
 }
 
 const setDeprecatedProperty = (object, property, value, message) => {
-  let warned = false
+  let warned = true
 
   Object.defineProperty(object, property, {
     get: () => {
