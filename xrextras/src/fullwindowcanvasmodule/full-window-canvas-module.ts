@@ -1,7 +1,7 @@
 declare const XR8: any
 
 function create() {
-  let canvas_ = null
+  let canvas_: any = null
   const vsize_ = {
     w: 0,
     h: 0,
@@ -104,6 +104,8 @@ function create() {
     setTimeout(() => window.scrollTo(0, (window.scrollY + 1) % 2), 300)
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const updateVideoSize = ({videoWidth, videoHeight}) => {
     vsize_.w = videoWidth
     vsize_.h = videoHeight
@@ -116,11 +118,15 @@ function create() {
     fillScreenWithCanvas()
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const onVideoSizeChange = ({videoWidth, videoHeight}) => {
     updateVideoSize({videoWidth, videoHeight})
     fillScreenWithCanvas()
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const onCameraStatusChange = ({status, video}) => {
     if (status !== 'hasVideo') {
       return
@@ -140,6 +146,8 @@ function create() {
     fillScreenWithCanvas()
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const onAttach = ({canvas, orientation, videoWidth, videoHeight}) => {
     canvas_ = canvas
     orientation_ = orientation
@@ -179,11 +187,13 @@ function create() {
     Object.assign(document.documentElement.style, originalHtmlStyleSubset_)
     canvas_ = null
     orientation_ = 0
-    delete vsize_.w
-    delete vsize_.h
+    vsize_.w = 0 // delete vsize_.w
+    vsize_.h = 0 // delete vsize_.h
     window.removeEventListener('resize', onWindowResize)
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const onDeviceOrientationChange = ({orientation}) => {
     orientation_ = orientation
     fillScreenWithCanvas()
@@ -207,7 +217,7 @@ function create() {
   }
 }
 
-let fullWindowCanvas = null
+let fullWindowCanvas: any = null
 
 const FullWindowCanvasFactory = () => {
   if (fullWindowCanvas == null) {

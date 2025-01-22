@@ -1,5 +1,5 @@
 declare const XR8: any
-let runConfig
+let runConfig: any
 
 // data BeforeSessionInitializeInput: input for onBeforeSessionInitialize in camera pipeline
 // a function that return false on session with attributes that match a certain filter
@@ -45,20 +45,22 @@ const create = () => {
     })
   }
 
-  const preventHeadset = (data) => {
+  const preventHeadset = (data: any) => {
     if (data.sessionAttributes.usesWebXr) {
       return true
     }
     return false
   }
 
-  const preventCamera = (data) => {
+  const preventCamera = (data: any) => {
     if (data.sessionAttributes.fillsCameraTexture) {
       return true
     }
     return false
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const configure = ({skipCameraSession}) => {
     if (skipCameraSession) {
       sessionPreventer = preventCamera
@@ -66,14 +68,14 @@ const create = () => {
   }
 
   const pipelineModule = () => {
-    let el
+    let el: any
 
     return {
       name: 'session-reconfigurator',
-      onRunConfigure: (data) => {
+      onRunConfigure: (data: any) => {
         runConfig = data.config
       },
-      onBeforeSessionInitialize: (data) => {
+      onBeforeSessionInitialize: (data: any) => {
         if (sessionPreventer && sessionPreventer(data)) {
           throw new Error('Session preventer choose to skip session')
         }
@@ -107,7 +109,7 @@ const create = () => {
           button.textContent = option.name
           el.appendChild(button)
           button.addEventListener('click', () => {
-            sessionPreventer = option.sessionPreventer
+            sessionPreventer = option.sessionPreventer!
             option.action()
           })
         })
@@ -134,7 +136,7 @@ const create = () => {
     preventHeadset,
   }
 }
-let SessionReconfigureModule = null
+let SessionReconfigureModule: any = null
 
 const SessionReconfigureFactory = () => {
   if (SessionReconfigureModule == null) {
