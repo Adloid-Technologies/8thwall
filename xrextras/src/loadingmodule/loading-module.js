@@ -27,6 +27,9 @@ function create() {
   let linkOutViewAndroid_
   let copyLinkViewAndroid_
   let userPromptError_
+  let userInfoCameraPermission_
+  let userInfoCameraPermissionError_
+  let userInfoMotionPermission_
   let motionPermissionsErrorApple_
   let cameraSelectionError_
   let deviceMotionErrorApple_
@@ -74,12 +77,15 @@ function create() {
     camPermissionsFailedApple_ = document.getElementById('cameraPermissionsErrorApple')
     micPermissionsFailedAndroid_ = document.getElementById('microphonePermissionsErrorAndroid')
     micPermissionsFailedApple_ = document.getElementById('microphonePermissionsErrorApple')
-    linkOutViewAndroid_ = document.getElementById('linkOutViewAndroid')
+    linkOutViewAndroid_ = document.getElementById('copyLinkCameraError')
     copyLinkViewAndroid_ = document.getElementById('copyLinkViewAndroid')
     deviceMotionErrorApple_ = document.getElementById('deviceMotionErrorApple')
     userPromptError_ = document.getElementById('userPromptError')
     cameraSelectionError_ = document.getElementById('cameraSelectionWorldTrackingError')
     motionPermissionsErrorApple_ = document.getElementById('motionPermissionsErrorApple')
+    userInfoMotionPermission_ = document.getElementById('userInfoMotionPermission')
+    userInfoCameraPermission_ = document.getElementById('userInfoCameraPermission')
+    userInfoCameraPermissionError_ = document.getElementById('userInfoCameraPermissionError')
   }
 
   const clearRoot = () => {
@@ -100,6 +106,9 @@ function create() {
     userPromptError_ = null
     cameraSelectionError_ = null
     motionPermissionsErrorApple_ = null
+    userInfoMotionPermission_ = null
+    userInfoCameraPermission_ = null
+    userInfoCameraPermissionError_ = null
   }
 
   // Hide the loading screen.
@@ -127,11 +136,11 @@ function create() {
   }
 
   const showCameraPermissionsPrompt = () => {
-    camPermissionsRequest_.classList.remove('hidden')
+    userInfoCameraPermission_.classList.remove('hidden')
   }
 
   const dismissCameraPermissionsPrompt = () => {
-    camPermissionsRequest_.classList.add('fade-out')
+    userInfoCameraPermission_.classList.add('fade-out')
   }
 
   const promptUserToChangeBrowserSettingsMicrophone = () => {
@@ -204,16 +213,16 @@ function create() {
   const displayAndroidLinkOutView = () => {
     camPermissionsRequest_.classList.add('hidden')
 
-    const ogTag = document.querySelector('meta[name="og:image"]')
-    const headerImgSrc = ogTag && ogTag.content
-    Array.from(document.querySelectorAll('.app-header-img')).forEach((img) => {
-      if (headerImgSrc) {
-        img.src = headerImgSrc
-      } else {
-        img.classList.add('foreground-image')
-        img.src = 'https://cdn.8thwall.com/web/img/almostthere/v2/android-fallback.png'
-      }
-    })
+    // const ogTag = document.querySelector('meta[name="og:image"]')
+    // const headerImgSrc = ogTag && ogTag.content
+    // Array.from(document.querySelectorAll('.app-header-img')).forEach((img) => {
+    //   if (headerImgSrc) {
+    //     img.src = headerImgSrc
+    //   } else {
+    //     img.classList.add('foreground-image')
+    //     // img.src = 'https://cdn.8thwall.com/web/img/almostthere/v2/android-fallback.png'
+    //   }
+    // })
 
     const cBtn = document.getElementById('open_browser_android')
     const link = window.location.href.replace(/^https:\/\//, '')
@@ -229,24 +238,24 @@ function create() {
   const displayCopyLinkView = () => {
     camPermissionsRequest_.classList.add('hidden')
 
-    const ogTag = document.querySelector('meta[name="og:image"]')
-    const headerImgSrc = ogTag && ogTag.content
-    Array.from(document.querySelectorAll('.app-header-img')).forEach((img) => {
-      if (headerImgSrc) {
-        img.src = headerImgSrc
-      } else {
-        img.classList.add('foreground-image')
-        img.src = 'https://cdn.8thwall.com/web/img/almostthere/v2/android-fallback.png'
-      }
-    })
+    // const ogTag = document.querySelector('meta[name="og:image"]')
+    // const headerImgSrc = ogTag && ogTag.content
+    // Array.from(document.querySelectorAll('.app-header-img')).forEach((img) => {
+    //   if (headerImgSrc) {
+    //     img.src = headerImgSrc
+    //   } else {
+    //     img.classList.add('foreground-image')
+    //     img.src = 'https://cdn.8thwall.com/web/img/almostthere/v2/android-fallback.png'
+    //   }
+    // })
 
     const link = window.location.href
-    const redirectLinks = document.querySelectorAll('.desktop-home-link')
+    const redirectLinks = document.querySelectorAll('.app-link-view')
     for (let i = 0; i < redirectLinks.length; i++) {
       redirectLinks[i].textContent = link
     }
 
-    const cBtn = document.getElementById('copy_link_android')
+    const cBtn = document.getElementById('error_copybtn')
     cBtn.addEventListener('click', () => {
       const dummy = document.createElement('input')
       document.body.appendChild(dummy)
@@ -259,43 +268,129 @@ function create() {
       cBtn.classList.add('error-copy-link-copied')
     })
 
-    copyLinkViewAndroid_.classList.remove('hidden')
+    linkOutViewAndroid_.classList.remove('hidden')
     hideLoadingScreen(false)
 
     XR8.pause()
     XR8.stop()
   }
 
-  const promptUserToChangeBrowserMotionSettings = () => {
-    window.removeEventListener('devicemotion', motionListener)
-    window.removeEventListener('message', iframeMotionListener)
-
-    // Device orientation permissions only need to be requested on iOS.
+  const displayInfoToAccessBrowserMotionSettings = () => {
     if (XR8.XrDevice.deviceEstimate().os !== 'iOS') {
       return
     }
-
-    // Device orientation permissions only need to be requested if they're required.
-    if (XR8.XrPermissions) {
-      const permissions = XR8.XrPermissions.permissions()
-      const requiredPermissions = XR8.requiredPermissions()
-      if (!requiredPermissions.has(permissions.DEVICE_MOTION) &&
-        !requiredPermissions.has(permissions.DEVICE_ORIENTATION)) {
-        return
+    const x =  document.getElementById('userInfoMotionPermission')
+    x.classList.remove('hidden')
+    const nextbtn = document.getElementById("userInfoMotionPermission_nextbtn")
+    nextbtn.addEventListener('click',() => {
+      if (hasMotionEvents_ !== true) {
+        promptUserToChangeBrowserMotionSettings()
       }
-    }
-
-    if (XR8.XrDevice.deviceEstimate().osVersion.startsWith('12')) {
-      deviceMotionErrorApple_.classList.remove('hidden')
-    } else {
-      motionPermissionsErrorApple_.classList.remove('hidden')
-      motionPermissionsErrorApple_.getElementsByClassName('wk-app-name')[0]
-        .innerText = getAppNameForDisplay()
-    }
+    })
     hideLoadingScreen(false)
-    XR8.pause()
-    XR8.stop()
   }
+
+  // const displayInfoToAccessCameraSettings = () => {
+  //   if (XR8.XrDevice.deviceEstimate().os !== 'iOS') {
+  //     return
+  //   }
+  //   userInfoCameraPermission_.classList.remove('hidden')
+  //   const nextbtn = document.getElementById("userInfoCameraPermission_nextbtn")
+  //   nextbtn.addEventListener('click',() => {
+  //       promptUserToChangeCameraSettings()
+  //       // showCameraPermissionsPrompt()
+  
+  //       userInfoCameraPermission_.classList.add('hidden')
+  //   })
+  //   hideLoadingScreen(false)
+  //   window.XR8.pause()
+  //   // alert("XR8" + XR8.pause)
+  //   window.XR8.stop()
+  // }
+
+  // const promptUserToChangeCameraSettings = () => {
+  //   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  //     // Try to access the camera
+  //     navigator.mediaDevices.getUserMedia({video: true})
+  //       .then((stream) => {
+  //         // Camera permission granted
+  //         console.log('Camera access granted');
+  //         window.XR8.pause()
+  //         window.XR8.stop()
+  //         window.XR8.resume()
+  //         userInfoCameraPermission_.classList.add('hidden')
+  //       })
+  //       .catch((err) => {
+  //         // Camera permission denied or other errors
+  //         userInfoCameraPermission_.classList.add('hidden')
+  //         userInfoCameraPermissionError_.classList.remove('hidden')
+
+  //         alert('Camera permission denied or error occurred:', err);
+          
+  //         // Optionally show a prompt asking the user to enable camera permissions
+  //         // alert('You need to grant camera permission to use this feature.');
+  //       });
+  //   } else {
+  //     console.error('Your browser does not support camera access');
+  //   }
+  // }
+
+  // const promptUserToChangeBrowserMotionSettings = () => {
+  //   window.removeEventListener('devicemotion', motionListener)
+  //   window.removeEventListener('message', iframeMotionListener)
+  //   // alert("here123")
+  //   // Device orientation permissions only need to be requested on iOS.
+  //   if (XR8.XrDevice.deviceEstimate().os !== 'iOS') {
+  //     return
+  //   }
+
+  //   if (window.DeviceOrientationEvent) {
+  //     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+  //         DeviceOrientationEvent.requestPermission()
+  //             .then(response => {
+  //               const x =  document.getElementById('userInfoMotionPermission')
+  //               x.classList.add('hidden')
+  //                 if (response === 'granted') {
+  //                   // alert("granted")
+  //                   // displayInfoToAccessCameraSettings()
+               
+  //                 } else {
+  //                   // alert("reject")
+  //                   userPromptError_.classList.remove('hidden')
+  //                 }
+  //             })
+  //             .catch(console.error);
+  //     } else {
+  //         // Start listening to orientation events on supported browsers
+  //         // startDeviceOrientation();
+  //     }
+  // }
+    
+
+  //   // Device orientation permissions only need to be requested if they're required.
+  //   // alert("permissions" + JSON.stringify(XR8))
+  //   if (XR8.XrPermissions) {
+  //     const permissions = XR8.XrPermissions.permissions()
+  //     const requiredPermissions = XR8.requiredPermissions()
+  //     if (!requiredPermissions.has(permissions.DEVICE_MOTION) &&
+  //       !requiredPermissions.has(permissions.DEVICE_ORIENTATION)) {
+  //         alert("Asking permissions")
+  //         return
+         
+  //     }
+  //   }
+
+  //   if (XR8.XrDevice.deviceEstimate().osVersion.startsWith('12')) {
+  //     deviceMotionErrorApple_.classList.remove('hidden')
+  //   } else {
+  //     // motionPermissionsErrorApple_.classList.remove('hidden')
+  //     // motionPermissionsErrorApple_.getElementsByClassName('wk-app-name')[0]
+  //     //   .innerText = getAppNameForDisplay()
+  //   }
+  //   hideLoadingScreen(false)
+  //   XR8.pause()
+  //   XR8.stop()
+  // }
 
   const showLoading = (args) => {
     if (rootNode_) {
@@ -333,6 +428,7 @@ function create() {
       if (hasMotionEvents_ !== true) {
         promptUserToChangeBrowserMotionSettings()
       }
+      // alert("onStart")
     },
     onUpdate: ({processCpuResult}) => {
       // We have already removed the loading screen, return.
@@ -344,6 +440,7 @@ function create() {
       // frames until it has a texture. This will only work for A-Frame. If other renderers need a
       // delay, use frameStartResult's cameraTexture, which should be one frame ahead of
       // `reality`'s texture.
+      // alert("comeshere")
       if (waitForRealityTexture_) {
         const {reality, facecontroller, handcontroller, layerscontroller} = processCpuResult
         const slamReady = reality && reality.realityTexture
@@ -370,12 +467,16 @@ function create() {
       waitingOnAppResources_ = false
     },
     onBeforeRun: (args) => {
+      // alert("1")
       runConfig_ = args && args.config
+      // alert("xrloaded" + JSON.stringify(args))
       waitingOnAppResources_ = true
       numUpdates_ = 0
       showLoading()
+      // displayInfoToAccessBrowserMotionSettings()
     },
     onCameraStatusChange: ({status, config, reason}) => {
+      // alert("abc1:"+status+JSON.stringify(config)+reason)
       if (!XR8.XrDevice.isDeviceBrowserCompatible(runConfig_) || !rootNode_) {
         return
       }
@@ -391,6 +492,7 @@ function create() {
         }
 
         const curBrowser = XR8.XrDevice.deviceEstimate().browser.inAppBrowser
+        // alert("abc:"+ JSON.stringify(XR8.XrDevice.deviceEstimate()))
         if (curBrowser) {
           cancelCameraTimeout = setTimeout(() => {
             if (XR8.XrDevice.deviceEstimate().os !== 'iOS') {
@@ -403,6 +505,7 @@ function create() {
         showLoading()
         if (!previouslyGotCameraPermission) {
           showCameraPermissionsPrompt()
+          // displayInfoToAccessCameraSettings()
         }
       } else if (status === 'hasStream') {
         clearTimeout(cancelCameraTimeout)
@@ -414,9 +517,15 @@ function create() {
       } else if (status === 'failed') {
         clearTimeout(cancelCameraTimeout)
         const deviceInfo = XR8.XrDevice.deviceEstimate()
+        userInfoCameraPermission_.classList.add('hidden')
+        alert("browser:"+ deviceInfo.browser.name +  reason)
         if (!hasGetUserMedia()) {
           displayCopyLinkView()
-        } else {
+        } else if (reason === 'DENY_CAMERA'){
+          userInfoCameraPermissionError_.classList.remove("hidden")
+        }
+        else {
+          alert("browser:"+ deviceInfo.browser.name)
           switch (deviceInfo.browser.inAppBrowser) {
             case 'Sino Weibo':
             case 'WeChat':
@@ -436,10 +545,11 @@ function create() {
             case 'Opera Touch':
             case 'Pinterest':
             case 'Snapchat':
-              promptUserToChangeBrowserSettings(reason)
+              // promptUserToChangeBrowserSettings(reason)
+              displayCopyLinkView()
               break
             default:
-              displayAndroidLinkOutView()
+              displayCopyLinkView()
               break
           }
         }
@@ -469,6 +579,7 @@ function create() {
           if (error.permission === XR8.XrPermissions.permissions().DEVICE_MOTION ||
             error.permission === XR8.XrPermissions.permissions().DEVICE_ORIENTATION) {
             // This only happens if motion or orientation are requestable permissions (iOS 13+)
+            // alert("here")
             promptUserToChangeBrowserMotionSettings()
             return
           }

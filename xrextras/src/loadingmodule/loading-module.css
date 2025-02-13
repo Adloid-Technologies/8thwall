@@ -131,10 +131,118 @@
 }
 
 .permission-error {
-  padding: 3vh 5vh;
+  /* padding: 3vh 5vh; */
   font-size: 3.5vh;
-  color: #fff;
-  background-color: #101118;
+  color: black;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100vw;
+  z-index: 10000;
+  align-items: center;
+}
+
+.bottom-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  padding: 28px;
+}
+
+.bottom-wrapper-new{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  text-align: left;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  padding: 28px;
+  padding-top: 12px;
+}
+
+.motionpopup{
+  width: 100%;
+  /* height: 100%; */
+  height: 332px;
+}
+
+.motionpopupnew{
+  width: 100%;
+  /* height: 100%; */
+  height: 300px;
+}
+
+.head{
+  color: rgba(227, 79, 72, 1);
+  font-size: 14px;
+}
+
+.desc{
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 26.4px;
+}
+
+.lastpara{
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 70%;
+  line-height: 19.2px;
+}
+
+.start{
+  font-weight: 700;
+}
+
+.copyLinkIcon{
+  width: 20px;
+  height: 20px;
+}
+
+.bottom-link-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.app-link-view{
+  width: 90%;
+  position: absolute;
+  bottom: 70px;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 10px;
+  z-index: 10000;
+  border: 1px dotted rgba(226, 226, 226, 1);
+  color: rgba(65, 116, 194, 1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nextbtnred{
+  width: 90%;
+  display: flex; 
+  gap: 10px;
+  position: absolute;
+  bottom: 15px;
+  z-index: 10000;
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 100px;
+  background: rgba(227, 79, 72, 1);
+  color: white;
 }
 
 .xrextras-old-style .permission-error {
