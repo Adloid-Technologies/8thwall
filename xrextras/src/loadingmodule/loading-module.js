@@ -525,7 +525,7 @@ function create() {
           userInfoCameraPermissionError_.classList.remove("hidden")
         }
         else {
-          alert("browser:"+ deviceInfo.browser.name)
+          alert("browser:"+ deviceInfo.browser.inAppBrowser)
           switch (deviceInfo.browser.inAppBrowser) {
             case 'Sino Weibo':
             case 'WeChat':
