@@ -5,12 +5,32 @@
 
 #loadBackground {
   z-index: 10;
-  background-color: #101118;
+  background-color: black;
   pointer-events: auto;
+}
+
+#loadImageContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  white-space: no-wrap;
+  width: 100%;
 }
 
 .xrextras-old-style #loadBackground {
   background-color: white;
+}
+
+.loader-text{
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 700;
+  color: white;
+  font-size: 20px;
 }
 
 #requestingCameraPermissions {
@@ -35,14 +55,14 @@
 }
 
 #loadImage {
-  position: absolute;
+  /* position: absolute;
   margin-top: -2.5em;
   margin-left: -2.5em;
   top: 50%;
-  left: 50%;
+  left: 50%; */
   height: 5em;
   width: 5em;
-  transform: translate(-50%, -50%);
+  /* transform: translate(-50%, -50%); */
 }
 
 /* camera and micrphone permission related styles */
