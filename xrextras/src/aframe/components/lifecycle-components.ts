@@ -283,13 +283,13 @@ const loadingComponent: ComponentDefinition = {
       }
     }
 
-    const loadBackground = document.querySelector('#loadBackground')
+    const loadBackground = document.querySelector('#loadBackground') as HTMLElement
 
     if (loadBackground) {
       loadBackground.style.backgroundColor = this.data.loadBackgroundColor
     }
 
-    const requestingCameraPermissions = document.querySelector('#requestingCameraPermissions')
+    const requestingCameraPermissions = document.querySelector('#requestingCameraPermissions') as HTMLElement
 
     if (requestingCameraPermissions) {
       requestingCameraPermissions.style.backgroundColor = this.data.cameraBackgroundColor
