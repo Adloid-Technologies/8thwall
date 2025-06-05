@@ -198,7 +198,7 @@ const create = () => {
     }
 
     document.getElementsByTagName('body')[0].appendChild(rootNode_)
-    installPromptShown = true
+    const installPromptShown = true
   }
 
   function hideInstallPrompt() {

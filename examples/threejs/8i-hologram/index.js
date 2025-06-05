@@ -74,7 +74,7 @@ const EightIPipelineModule = () => {
   const initXrScene = ({scene, camera}) => {
 
     //Special 8i Stuff
-    ENVSummary = JSON.stringify(EightI.Env)
+    const ENVSummary = JSON.stringify(EightI.Env)
     if (wasmSupported) {
       EightI.Env.registerFileURL("libeighti.wasm", "https://player.8i.com/interface/1.4/libeighti.wasm")
       EightI.Env.registerFileURL("libeighti.wast", "https://player.8i.com/interface/1.4/libeighti.wast")
